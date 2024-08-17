@@ -1,0 +1,71 @@
+name: Speedtest cube-hierarchy-query
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  speedtest:
+    name: Speedtest cube-hierarchy-query
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: checkout AAA
+        uses: actions/checkout@v4
+        with:
+          repository: zazuko/cube-hierarchy-query
+          ref: v2.2.2
+          path: AAA
+      - name: checkout BBB
+        uses: actions/checkout@v4
+        with:
+          repository: zazuko/cube-hierarchy-query
+          ref: v3.0.0
+          path: BBB
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Packages 🧩
+        run: |
+          npm install sparql-formatter
+      - name: Install Packages AAA 🧩
+        run: |
+          [ -d AAA ] && pushd AAA && sed -i -e "s~\ *results.forEach(print(0))~~" -e "s~\ *process.exit(0)~~" -e "s~\[\$rdf.ns.schema.name, { language: 'de' }\],~\$rdf.ns.schema.name,\$rdf.ns.schema.description,\$rdf.ns.schema.position,\$rdf.ns.schema.alternateName,~" -e "s~.*log.*('perf')~console.log~" examples/hierarchy.ts && npm install && popd
+      - name: Install Packages BBB 🧩
+        run: |
+          [ -d BBB ] && pushd BBB && sed -i -e "s~\ *results.forEach(print(0))~~" -e "s~\ *process.exit(0)~~" -e "s~\[\$rdf.ns.schema.name, { language: 'de' }\],~\$rdf.ns.schema.name,\$rdf.ns.schema.description,\$rdf.ns.schema.position,\$rdf.ns.schema.alternateName,~" -e "s~.*log.*('perf')~console.log~" examples/hierarchy.ts && npm install && popd
+      - name: Speedtest cube-hierarchy-query 🔎
+        continue-on-error: true
+        run: |
+          ./check.sh
+          ./check.sh
+          ./check.sh
+          ./check.sh
+          ./check.sh
+          ./generate_reports.sh
+      - name: Upload Pages artifact
+        id: upload
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'html_reports'
+          retention-days: 90
+
+  deploy:
+    name: Deploy result
+    needs: speedtest
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
