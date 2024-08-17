@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+*.js
+AAA
+BBB
+v?.*
+csv_metrics/*
+logs/*
+html_reports/*

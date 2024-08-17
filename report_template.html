@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Performance Report</title>
+    <style>body { font-family: sans-serif; } .c { display: inline-block; *display: inline; width: 32.9vw; font-size: 0.8em; } .code { max-height: 4em; min-height: 2em; padding: 0.4em; overflow: auto; white-space: pre; background: #222222; color: #ffffff; width: 99%; font-family: monospace; font-size: 0.8em; border: 1px solid #999; border-radius: 0.4em; } a { color: #bbbbbb; text-decoration: none; } .copy { cursor: pointer; } .copy > .code { display: none; } </style>
+</head>
+<body>
+<h2><a href="#reportname" name="reportname">#</a>&nbsp;reportname</h2>
+<div id="container_reportname" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  <div class="c">
+    <div>inversePath: inversepath</div>
+    <div>childTargetClass: childtargetclass</div>
+    <div class="copy">📋 command<div class="code shell">querycmd</div></div>
+  </div>
+  <div class="c">
+    <div>versionAAA</div>
+    <div>p(20): p20vAAAs</div>
+    <div>p(50): p50vAAAs</div>
+    <div>p(80): p80vAAAs</div>
+    <div class="copy">📋 query<div class="code sparql">querycodevAAA</div></div>
+  </div>
+  <div class="c">
+    <div>versionBBB</div>
+    <div>p(20): p20vBBBs</div>
+    <div>p(50): p50vBBBs</div>
+    <div>p(80): p80vBBBs</div>
+  <div class="copy">📋 query<div class="code sparql">querycodevBBB</div></div>
+</div>
+
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script src="https://code.highcharts.com/modules/data.src.js"></script>
+<script type="text/javascript">
+    function createChart() {
+        Highcharts.chart('container_reportname', {
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'click and drag in the plot area to zoom in' : 'pinch the chart to zoom in'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'time [ms]'
+                },
+		min: 0
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+                line: {
+                    animation: false
+                }
+            },
+            data: {
+                csv: 'csv_file_contents',
+                itemDelimiter: ',',
+                lineDelimiter: '|',
+/*
+                complete: function(o) {
+                    o.series.forEach(series => {
+                        series.data.forEach(datapoint => {
+                            // transform times from seconds to milliseconds
+                            datapoint[1] = datapoint[1] * 1000;
+                        });
+                    });
+                }
+*/
+            }
+        });
+    }
+
+    createChart();
+
+    document.addEventListener('click', e => {
+      if (e.target.matches('.copy') && e.target.firstElementChild?.matches('.code')) {
+        navigator.clipboard.writeText(e.target.firstElementChild.textContent)
+          .then(() => console.log('copied text'), error => console.error('failed to copy', error));
+      }
+    });
+
+/*
+    document.addEventListener('click', e => {
+      if (e.target.matches('.code')) {
+        navigator.clipboard.writeText(e.target.textContent)
+          .then(() => console.log('copied text'), error => console.error('failed to copy', error));
+      }
+    });
+*/
+
+</script>
+
+</body>
+</html>
