@@ -4,8 +4,11 @@ export LC_ALL=C.UTF-8
 
 mkdir -p html_reports
 
-echo '<!DOCTYPE HTML><html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Performance Report</title></head><body style="font-family:sans-serif;"><h1>Performance Monitoring</h1>' >"html_reports/index.html"
-echo "<h3><a href=\"summary.html\">summary</a></h3>" >>"html_reports/index.html"
+#echo '<!DOCTYPE HTML><html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Performance Report</title></head><body style="font-family:sans-serif;"><h1>Performance Monitoring</h1>' >"html_reports/index.html"
+#echo "<h3><a href=\"summary.html\">summary</a></h3>" >>"html_reports/index.html"
+
+cat report_header.html > "html_reports/index.html"
+echo '<h1>Performance Monitoring</h1>' >>"html_reports/index.html"
 
 for csv_filepath in csv_metrics/*.csv; do
   [ $(cat $csv_filepath | wc -l) -eq 1 ] && continue
@@ -56,8 +59,10 @@ for csv_filepath in csv_metrics/*.csv; do
   template=${template/versionBBB/v${versionBBB}}
   template=${template/querytimeAAA/v${versionAAA}}
   template=${template/querytimeBBB/v${versionBBB}}
-  echo "${template}" >"html_reports/$csv_filename.html"
+#  echo "${template}" >"html_reports/$csv_filename.html"
+  echo "${template}" >>"html_reports/index.html"
 
-  echo "<h3><a href=\"$csv_filename.html\">$csv_filename</a></h3>" >>"html_reports/index.html"
+#  echo "<h3><a href=\"$csv_filename.html\">$csv_filename</a></h3>" >>"html_reports/index.html"
 done
-cat html_reports/http*.html > html_reports/summary.html
+#cat html_reports/http*.html > html_reports/summary.html
+cat report_footer.html >>"html_reports/index.html"
