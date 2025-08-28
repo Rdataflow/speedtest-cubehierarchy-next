@@ -48,7 +48,7 @@ jobs:
           ./generate_reports.sh
       - name: Upload Pages artifact
         id: upload
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: 'html_reports'
           retention-days: 90
