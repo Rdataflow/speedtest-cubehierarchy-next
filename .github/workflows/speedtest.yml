@@ -12,15 +12,15 @@ jobs:
     name: Speedtest cube-hierarchy-query
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: checkout AAA
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: zazuko/cube-hierarchy-query
           ref: v2.2.2
           path: AAA
       - name: checkout BBB
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: zazuko/cube-hierarchy-query
           ref: v3.0.0
