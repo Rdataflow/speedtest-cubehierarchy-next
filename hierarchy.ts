@@ -11,7 +11,7 @@ const main = async () => {
   const parser = new argparse.ArgumentParser()
   parser.add_argument('--cube', { required: true })
   parser.add_argument('--dimensionIri', { required: false })
-  parser.add_argument('--endpoint', { required: false, default: 'https://int.lindas.admin.ch/query' })
+  parser.add_argument('--endpoint', { required: false, default: 'https://lindas.int.cz-aws.net/query' })
   parser.add_argument('--print-query', { action: 'store_true' })
   parser.add_argument('--print-shape', { action: 'store_true' })
 
